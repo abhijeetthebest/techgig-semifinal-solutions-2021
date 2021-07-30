@@ -1,3 +1,5 @@
+// Solution involves memorised DP and a little recursion.
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -82,11 +84,11 @@ public class Main {
 
 
     private static long func(long n, HashMap<Long, Long> d, List<Long> primes) {
-        if (primes.contains(n)){
+        if (primes.contains(n)){                                            //when n is prime, simply return n+1
             d.put(n,n+1);
             return n + 1;
         }
-        if (d.containsKey(n)) {
+        if (d.containsKey(n)) {                                             
             return d.get(n);
         }
         long su = 0;
@@ -95,7 +97,7 @@ public class Main {
             if (n % i == 0) {
                 flag=true;
                 long groups = n / i;
-                su += Math.max(func(i, d, primes) * groups + 1, func(groups, d, primes) * i + 1);
+                su += Math.max(func(i, d, primes) * groups + 1, func(groups, d, primes) * i + 1);       //main recursive step
                 if (d.containsKey(n)){
                     d.put(n,Math.max(d.get(n),su));
                 }
