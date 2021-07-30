@@ -1,4 +1,4 @@
-// Solution involves memorised DP and a little recursion.
+// Solution involves memorised DP and a little recursion. Passing all the test cases!100/100
 
 import java.io.BufferedReader;
 import java.io.IOException;
