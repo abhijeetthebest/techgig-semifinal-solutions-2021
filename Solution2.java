@@ -1,90 +1,85 @@
-//Basically we had to implement an optimised dijkstra shortest path algo using priority queue.
+// Basically we had to implement optimised dijkstra algo using priority queue. Score 80/100
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class CandidateCode {
+public class girfriend {
+
+    private static boolean isNotVisited(int x,
+                                        List<int[]> path)
+    {
+        int size = path.size();
+        for(int i = 0; i < size; i++)
+            if (path.get(i)[0] == x)
+                return false;
+
+        return true;
+    }
 
 
+    public static int bfs(int[][] graph, int src, int dest, int houses){
+
+        boolean[] visited=new boolean[houses+1];
+
+        PriorityQueue<int[]> queue = new PriorityQueue<int[]>(
+                (t1,t2) -> t1[1]-t2[1]) ;
+
+        //starting node
+        queue.offer(new int[]{src,0});
+
+        int m=10000001;
 
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String[] inputs = reader.readLine().split(" ");
-        int n = Integer.parseInt(inputs[0]);
-        int e = Integer.parseInt(inputs[1]);
-        Map<Long, ArrayList<long[]>> graph = new HashMap();
-        for (int i = 0; i < e; i++) {
-            String[] edge = reader.readLine().split(" ");
-            long from = Long.parseLong(edge[0]);
-            long to = Long.parseLong(edge[1]);
-            long cost = Long.parseLong(edge[2]);
-            if (!graph.containsKey(from))
-                graph.put(from, new ArrayList<>());
-            if (!graph.containsKey(to))
-                graph.put(to, new ArrayList<>());
-            graph.get(from).add(new long[]{to, cost});
-            graph.get(to).add(new long[]{from, cost});
-        }
-
-        boolean[] visited = new boolean[n + 1];
-        long[] dist = new long[n + 1];
-        for (int i = 1; i <= n; i++) {
-            dist[i] = 1000001;
-        }
-
-
-        PriorityQueue<long[]> queue = new PriorityQueue<long[]>(new Comparator<long[]>() {
-            @Override
-            public int compare(long[] o1, long[] o2) {
-                if (o1[1]>o2[1])
-                    return 1;
-                else if (o2[1]>o1[1])
-                    return -1;
-                else
-                    return 0;
-            }
-        });
-
-
-        //starting nodes
-        int r = Integer.parseInt(reader.readLine());
-        for (int i = 0; i < r; i++) {
-            long point = Long.parseLong(reader.readLine());
-            dist[(int) point] = 0;
-            queue.offer(new long[]{point, 0});
-        }
 
         while (!queue.isEmpty()) {
-            long[] q = queue.poll();
+            int[] q = queue.poll();
 
-            long node = (int) q[0];
-            long d = q[1];
+            int node = q[0];
+            int s = q[1];
 
-
-            if (visited[(int) node])
-                continue;
-            visited[(int) node] = true;
-
-            for (int i = 0; i < graph.get(node).size(); i++) {
-                int newn = (int) graph.get(node).get(i)[0];
-                long c = graph.get(node).get(i)[1];
-                if (!visited[newn] && (dist[newn]>c+d))
-                    dist[newn] = c + d;
-                    queue.offer(new long[]{(long) newn, dist[newn]});
+            // If last vertex is the desired destination
+            if (node == dest) {
+                return s;
             }
+
+            if  (visited[node])
+                continue;
+            visited[node]=true;
+
+            for (int i=1;i<=houses;i++){
+                if (graph[node][i]>0 && !visited[i])
+                    queue.offer(new int[]{i, Math.max(0, Math.max(graph[node][i], s))});
+            }
+
         }
-        for (int i = 1; i <= n; i++)
-            System.out.println(dist[i]);
+        return m;
 
 
     }
 
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String[] inputs = reader.readLine().split(" ");
+        int houses = Integer.parseInt(inputs[0]);
+        int roads = Integer.parseInt(inputs[1]);
+        int[][] graph = new int[houses + 1][houses + 1];
+        for (int i = 0; i < roads; i++) {
+            String[] edge = reader.readLine().split(" ");
+            int from=Integer.parseInt(edge[0]);
+            int to=Integer.parseInt(edge[1]);
+            int cost=Integer.parseInt(edge[2]);
+            graph[from][to]=cost;
+            graph[to][from]=cost;
+        }
+        int result=bfs(graph,1, houses, houses);
+
+        if (result==10000001)
+            System.out.println("NOT POSSIBLE");
+        else
+            System.out.println(result);
+    }
+
+
 }
-
-
-
-
-
