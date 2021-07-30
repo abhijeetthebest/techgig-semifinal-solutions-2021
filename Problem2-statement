@@ -1,0 +1,6 @@
+Girlfriends problem . Given a bidirectional graph with a particular number of roads. Find the shortest route from src(1) to dest(n).Print "not possible" if no possible path is found.
+
+Input: two numbers telling number of houses(m) and number of roads(n)
+Next n lines are in the form "u v cost" depicting starting node, ending node and the cost.
+
+Output:Single integer which is the shortest path.
